@@ -1,7 +1,15 @@
 fetch("/api/foryou")
   .then(r => r.json())
   .then(d => {
+    console.log("API RESPONSE:", d)
+
+    if (!d.data) {
+      document.body.innerHTML += "<p style='color:red'>DATA KOSONG</p>"
+      return
+    }
+
     const grid = document.getElementById("grid")
+
     d.data.forEach(item => {
       const card = document.createElement("div")
       card.className = "card"
@@ -9,9 +17,10 @@ fetch("/api/foryou")
         <img src="${item.cover}">
         <div class="title">${item.bookName}</div>
       `
-      card.onclick = () => {
-        location.href = `/app.html?bookId=${item.bookId}`
-      }
       grid.appendChild(card)
     })
+  })
+  .catch(err => {
+    document.body.innerHTML += "<p style='color:red'>ERROR FETCH</p>"
+    console.error(err)
   })
